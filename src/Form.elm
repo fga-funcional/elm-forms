@@ -6,7 +6,7 @@ import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import List.Extra exposing (getAt, splitAt, updateAt, remove)
+import List.Extra exposing (getAt, splitAt, updateAt, remove, notMember)
 import Maybe exposing (withDefault)
 import Regex exposing (Regex)
 import Utils exposing (..)
@@ -97,7 +97,7 @@ regexT v field =
     { field |
               value = v 
             , which = RegexField (takeRegex field) True
-            , errors = remove "Invalid Email" field.errors
+            , errors = remove "Regex doesn't match" field.errors
     }
 
 regexF :  Value -> Field -> Field
@@ -105,9 +105,15 @@ regexF v field =
     { field |
               value = v 
             , which = RegexField (takeRegex field) False
-            , errors = "Regex doesn't match" :: field.errors
+            , errors = addRegexError field
     }
 
+addRegexError : Field -> List String
+addRegexError f =
+    if (notMember "Regex doesn't match" f.errors) then
+        "Regex doesn't match" :: f.errors
+    else
+        f.errors
 
 
 --------------------------------------------------------------------------------
