@@ -1,7 +1,4 @@
-module Model exposing (Model, Field, Value(..), FieldType(..), takeRegex, regexT, regexF, value, string, number, bool, regexForm, init)
-
-import List.Extra exposing (notMember)
-import List.Extra exposing (remove)
+module Model exposing (Model, Field, Value(..), FieldType(..), string, number, bool, regexForm, init)
 
 type alias Model =
     { fields : List Field
@@ -59,38 +56,3 @@ regexForm name label regexValue isRequired =
 
 inf =
     1.0e300
-
-value : Value -> Field -> Field
-value v field =
-    { field | value = v }
-
-regexT : Value -> Field -> Field
-regexT v field =
-    { field |
-              value = v 
-            , which = RegexField (takeRegex field) True
-            , errors = remove "Regex doesn't match" field.errors
-    }
-
-takeRegex : Field -> String
-takeRegex m =
-    case m.which of
-    RegexField st _->
-        st
-    _ ->
-        ""
-
-regexF :  Value -> Field -> Field
-regexF v field =
-    { field |
-              value = v 
-            , which = RegexField (takeRegex field) False
-            , errors = addRegexError field
-    }
-
-addRegexError : Field -> List String
-addRegexError f =
-    if (notMember "Regex doesn't match" f.errors) then
-        "Regex doesn't match" :: f.errors
-    else
-        f.errors
