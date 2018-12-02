@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Model exposing (..)
 import Messages exposing (Msg(..), valueToString)
-import Utils exposing (..)
+import Utils exposing (ulMap)
 
 view : Model -> Html Msg
 view m =
