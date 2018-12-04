@@ -36,23 +36,34 @@ init =
 
 string : String -> String -> Bool -> Field
 string name label isRequired =
-    Field name label "" (StringValue "") (StringField { maxLength = 2 ^ 30 }) isRequired []
+    if isRequired then
+        Field name label "" (StringValue "") (StringField { maxLength = 2 ^ 30 }) isRequired ["Cant be blanck"]
+    else
+        Field name label "" (StringValue "") (StringField { maxLength = 2 ^ 30 }) isRequired []
 
 
 number : String -> String -> Bool -> Field
 number name label isRequired =
-    Field name label "" (StringValue "") (NumberField { range = ( -inf, inf, 0.01 ) }) isRequired []
+    if isRequired then
+        Field name label "" (StringValue "") (NumberField { range = ( -inf, inf, 0.01 ) }) isRequired ["Cant be blanck"]
+    else
+        Field name label "" (StringValue "") (NumberField { range = ( -inf, inf, 0.01 ) }) isRequired []
 
 
 bool : String -> String -> Bool -> Field
 bool name label isRequired =
-    Field name label "" (BoolValue False) BoolField isRequired []
+    if isRequired then
+        Field name label "" (BoolValue False) BoolField isRequired ["Cant be blanck"]
+    else
+        Field name label "" (BoolValue False) BoolField isRequired []
 
 
 regexForm : String -> String -> String  -> Bool -> Field
 regexForm name label regexValue isRequired =
-    Field name label "" (StringValue "") (RegexField regexValue False) isRequired []
-
+    if isRequired then
+        Field name label "" (StringValue "") (RegexField regexValue False) isRequired ["Cant be blanck"]
+    else
+        Field name label "" (StringValue "") (RegexField regexValue False) isRequired []
 
 inf =
     1.0e300
