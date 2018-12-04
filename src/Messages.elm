@@ -70,7 +70,7 @@ regexT v field =
     { field |
               value = v
             , which = RegexField (takeRegex field) True
-            , errors = removeAndAdd1 field.errors
+            , errors = removeAndAddT field.errors
     }
     else if  not (isEmpty field.errors) then
         { field |
@@ -85,12 +85,12 @@ regexT v field =
                 , errors = remove "Regex doesn't match" field.errors
         }
 
-removeAndAdd1 : List String -> List String
-removeAndAdd1 l =
+removeAndAddT : List String -> List String
+removeAndAddT l =
     addError (remove "Regex doesn't match" l) "Cant be blanck"
 
-removeAndAdd2 : List String -> List String
-removeAndAdd2 l =
+removeAndAddF : List String -> List String
+removeAndAddF l =
     addError (remove "Cant be blanck" l) "Regex doesn't match"
 
 removeTwo : List String -> List String
@@ -126,7 +126,7 @@ regexF v field =
         { field |
                   value = v
                 , which = RegexField (takeRegex field) False
-                , errors = removeAndAdd2 field.errors
+                , errors = removeAndAddF field.errors
         }
     else
         { field |
