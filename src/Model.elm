@@ -29,9 +29,18 @@ type FieldType
     | RegexField String Bool
 
 
-init : Model
-init =
-    { fields = [], errors = [] }
+init : () -> ( Model, Cmd msg )
+init _ =
+    ( { fields = [ string "name" "Name" False
+            , string "email" "E-mail" True
+            , number "age" "Age" True
+            , bool "bollean" "Check" False
+            , regexForm "real-email" "E-mailR" "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" True
+            ]
+      , errors = []
+      }
+      , Cmd.none
+    )
 
 
 string : String -> String -> Bool -> Field

@@ -14,18 +14,18 @@ type Msg
     | Regex Int Value
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg m =
     case msg of
         Input i st ->
-             { m | fields = updateAt i (verifyIsRequired st) m.fields }
+             ({ m | fields = updateAt i (verifyIsRequired st) m.fields }, Cmd.none)
         Regex i st ->
             if Regex.contains (validRegex (getByIndex m.fields i)) (valueToString (getByIndex m.fields i).value) || st == StringValue "" then
-                { m | fields = updateAt i (regexT st) m.fields }
+                ({ m | fields = updateAt i (regexT st) m.fields }, Cmd.none)
             else
-                { m | fields = updateAt i (regexF st) m.fields }
+                ({ m | fields = updateAt i (regexF st) m.fields }, Cmd.none)
         _ ->
-            m
+            (m, Cmd.none)
 
 verifyIsRequired : Value -> Field -> Field
 verifyIsRequired st f =

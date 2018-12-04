@@ -1,14 +1,25 @@
-module Main exposing (main)
+module App exposing (main)
 
 import Browser
-import Example exposing ( example )
 import Model exposing (..)
 import Messages exposing (..)
-import View exposing (..)
+import CreateForm exposing (..)
+
+
+-- element
+-- aplication
 
 main =
-    Browser.sandbox
-        { init = example
+    Browser.element
+        { init = init
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
+
+-- SUBSCRIPTIONS -----------------------------------------
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
