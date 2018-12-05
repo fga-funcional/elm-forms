@@ -1,5 +1,6 @@
 module View exposing (view)
 
+import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -7,7 +8,7 @@ import Model exposing (..)
 import Messages exposing (Msg(..), valueToString)
 import Utils exposing (ulMap)
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view m =
     let
         validation =
@@ -16,14 +17,17 @@ view m =
             else
                 "(invalid)"
     in
-    div []
-        [ h1 [] [ text "Form", text validation ]
-        , ulMap text m.errors
-        , div [] (List.indexedMap viewField m.fields)
-        , button [] [ text "Create" ]
-        , h3 [] [ text "Raw data" ]
-        , code [] [ text (Debug.toString m) ]
-        ]
+    { title = "ElmForm"
+    , body =
+       [ div []
+       [ h1 [] [ text "Form", text validation ]
+    ,  ulMap text m.errors
+    ,  div [] (List.indexedMap viewField m.fields)
+    ,  button [] [ text "Create" ]
+    ,  h3 [] [ text "Raw data" ]
+    ,  code [] [ text (Debug.toString m) ]
+    ] ]
+    }
 
 
 viewField : Int -> Field -> Html Msg

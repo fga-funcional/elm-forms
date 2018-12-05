@@ -4,17 +4,20 @@ import Browser
 import Model exposing (..)
 import Messages exposing (..)
 import CreateForm exposing (..)
+-- import View exposing (..)
 
 
 -- element
 -- aplication
 
 main =
-    Browser.element
+    Browser.application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlChange = UrlChanged
+        , onUrlRequest = UrlRequest
         }
 
 -- SUBSCRIPTIONS -----------------------------------------

@@ -1,5 +1,8 @@
 module Model exposing (Model, Field, Value(..), FieldType(..), string, number, bool, regexForm, init)
 
+import Browser.Navigation as Nav
+import Url
+
 type alias Model =
     { fields : List Field
     , errors : List String
@@ -29,8 +32,8 @@ type FieldType
     | RegexField String Bool
 
 
-init : () -> ( Model, Cmd msg )
-init _ =
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd msg )
+init _ url key =
     ( { fields = [ string "name" "Name" False
             , string "email" "E-mail" True
             , number "age" "Age" True

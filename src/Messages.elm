@@ -6,12 +6,16 @@ import List.Extra exposing (getAt, updateAt)
 import Maybe exposing (withDefault)
 import List.Extra exposing (notMember, remove, find)
 import List exposing (isEmpty)
+import Url
+import Browser
 
 type Msg
     = NoOp
     | ValidateForm
     | Input Int Value
     | Regex Int Value
+    | UrlChanged Url.Url
+    | UrlRequest Browser.UrlRequest
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
