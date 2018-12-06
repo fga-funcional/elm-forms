@@ -19,7 +19,7 @@ view m =
     in
     { title = "ElmForm"
     , body =
-       [ div []
+     [ div []
        [ h1 [] [ text "Form", text validation ]
     ,  ulMap text m.errors
     ,  div [] (List.indexedMap viewField m.fields)

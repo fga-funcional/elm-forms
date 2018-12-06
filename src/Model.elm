@@ -6,6 +6,9 @@ import Url
 type alias Model =
     { fields : List Field
     , errors : List String
+    , name : String
+    , label : String
+    , bool : Bool
     }
 
 
@@ -34,13 +37,11 @@ type FieldType
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd msg )
 init _ url key =
-    ( { fields = [ string "name" "Name" False
-            , string "email" "E-mail" True
-            , number "age" "Age" True
-            , bool "bollean" "Check" False
-            , regexForm "real-email" "E-mailR" "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" True
-            ]
+    ( { fields = []
       , errors = []
+      , name = ""
+      , label = ""
+      , bool = False
       }
       , Cmd.none
     )

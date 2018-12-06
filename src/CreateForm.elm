@@ -1,12 +1,12 @@
 module CreateForm exposing (view)
 
+import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Model exposing (..)
 import Messages exposing (Msg(..), valueToString)
+import Model exposing (..)
 import Utils exposing (ulMap)
-import Browser
 
 
 view : Model -> Browser.Document Msg
@@ -15,21 +15,37 @@ view m =
         validation =
             if isValid m then
                 "(ok)"
+
             else
                 "(invalid)"
     in
     { title = "ElmForm"
     , body =
-       [ div []
-       [ h1 [] [ text "Form", text validation ]
-    ,  ulMap text m.errors
-    ,  div [] (List.indexedMap viewField m.fields)
-    ,  button [] [ text "Create" ]
-    ,  h3 [] [ text "Raw data" ]
-    ,  code [] [ text (Debug.toString m) ]
-    ] ]
+        [ div []
+            [ h1 [] [ text "Form", text validation ]
+            , div []
+                [ label [] [ text "Name" ]
+                , input [ onInput Name ] []
+                , label [] [ text "label" ]
+                , input [ onInput Label ] []
+                , label [] [ text "obrigatório" ]
+                , input [onClick (Bool (isRequired m.bool)), type_ "checkbox" ] []
+                , button [ onClick (Type "Text") ] [text "Texto"]
+                , button [ onClick (Type "Numbers") ] [text "Numeros"]
+                , button [ onClick (Type "Bool") ] [text "Boleano"]
+                ]
+            , ulMap text m.errors
+            , div [] (List.indexedMap viewField m.fields)
+            , button [] [ text "Create" ]
+            , h3 [] [ text "Raw data" ]
+            , code [] [ text (Debug.toString m) ]
+            ]
+        ]
     }
 
+isRequired : Bool -> Bool
+isRequired b = 
+    not b
 
 viewField : Int -> Field -> Html Msg
 viewField i field =
@@ -43,13 +59,15 @@ viewField i field =
                     [ type_ "checkbox" ]
 
                 RegexField _ b ->
-                    if (valueToString field.value) == "" then
+                    if valueToString field.value == "" then
                         []
+
+                    else if not b then
+                        [ style "background-color" "red" ]
+
                     else
-                        if not b then
-                            [style "background-color" "red"]
-                        else
-                            []
+                        []
+
                 _ ->
                     []
     in
@@ -75,6 +93,7 @@ stringFromValue v =
         BoolValue b ->
             "False"
 
+
 isValid : Model -> Bool
 isValid m =
     List.isEmpty m.errors && List.all (.errors >> List.isEmpty) m.fields
@@ -96,7 +115,7 @@ inputField i field =
         BoolField ->
             onClick (Input i (toggleValue field.value))
 
-        RegexField _ _->
+        RegexField _ _ ->
             onInput (valueFromString field.which >> Regex i)
 
         _ ->

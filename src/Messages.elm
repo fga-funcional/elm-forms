@@ -1,6 +1,6 @@
 module Messages exposing (update, Msg(..), valueToString)
 
-import Model exposing (Model, Field, Value(..), FieldType(..))
+import Model exposing (Model, Field, Value(..), FieldType(..), string, number, bool, regexForm)
 import Regex exposing (Regex)
 import List.Extra exposing (getAt, updateAt)
 import Maybe exposing (withDefault)
@@ -16,6 +16,10 @@ type Msg
     | Regex Int Value
     | UrlChanged Url.Url
     | UrlRequest Browser.UrlRequest
+    | Name String
+    | Label String
+    | Bool Bool
+    | Type String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -28,8 +32,28 @@ update msg m =
                 ({ m | fields = updateAt i (regexT st) m.fields }, Cmd.none)
             else
                 ({ m | fields = updateAt i (regexF st) m.fields }, Cmd.none)
+        Name st ->
+            ({ m | name = st }, Cmd.none)
+        Label st ->
+            ({ m | label = st }, Cmd.none)
+        Bool b ->
+            ({ m | bool = b }, Cmd.none)
+        Type st ->
+            case st of
+                "Text" ->
+                    ( { m | fields = addField m.fields ( string m.name m.label m.bool ) }, Cmd.none)
+                "Numbers" ->
+                    ( { m | fields = addField m.fields ( number m.name m.label m.bool ) }, Cmd.none)
+                "Bool" ->
+                    ( { m | fields = addField m.fields ( bool m.name m.label m.bool ) }, Cmd.none)
+                _ ->
+                    (m, Cmd.none)
         _ ->
             (m, Cmd.none)
+
+addField : List Field -> Field -> List Field
+addField l f =
+    f :: l
 
 verifyIsRequired : Value -> Field -> Field
 verifyIsRequired st f =

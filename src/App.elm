@@ -6,10 +6,6 @@ import Messages exposing (..)
 import CreateForm exposing (..)
 -- import View exposing (..)
 
-
--- element
--- aplication
-
 main =
     Browser.application
         { init = init
