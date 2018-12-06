@@ -33,10 +33,12 @@ view m =
                 , button [ onClick (Type "Text") ] [text "Texto"]
                 , button [ onClick (Type "Numbers") ] [text "Numeros"]
                 , button [ onClick (Type "Bool") ] [text "Boleano"]
+                , label [] [ text "Regex" ]
+                , input [ onInput RegexFormCreate ] []
+                , button [ onClick (Type "Regex") ] [text "Regex"]
                 ]
             , ulMap text m.errors
             , div [] (List.indexedMap viewField m.fields)
-            , button [] [ text "Create" ]
             , h3 [] [ text "Raw data" ]
             , code [] [ text (Debug.toString m) ]
             ]

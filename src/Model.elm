@@ -9,6 +9,7 @@ type alias Model =
     , name : String
     , label : String
     , bool : Bool
+    , regex : String
     }
 
 
@@ -37,11 +38,18 @@ type FieldType
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd msg )
 init _ url key =
-    ( { fields = []
+    ( { fields = [
+        --  string "name" "Name" False
+            -- , string "email" "E-mail" True
+            -- , number "age" "Age" True
+            -- , bool "bollean" "Check" False
+            -- , regexForm "real-email" "E-mailR" "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" True
+        ]
       , errors = []
       , name = ""
       , label = ""
       , bool = False
+      , regex = ""
       }
       , Cmd.none
     )

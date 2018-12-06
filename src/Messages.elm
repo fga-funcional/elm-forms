@@ -20,6 +20,7 @@ type Msg
     | Label String
     | Bool Bool
     | Type String
+    | RegexFormCreate String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -38,6 +39,8 @@ update msg m =
             ({ m | label = st }, Cmd.none)
         Bool b ->
             ({ m | bool = b }, Cmd.none)
+        RegexFormCreate st ->
+            ({ m | regex = st }, Cmd.none)
         Type st ->
             case st of
                 "Text" ->
@@ -46,6 +49,8 @@ update msg m =
                     ( { m | fields = addField m.fields ( number m.name m.label m.bool ) }, Cmd.none)
                 "Bool" ->
                     ( { m | fields = addField m.fields ( bool m.name m.label m.bool ) }, Cmd.none)
+                "Regex" ->
+                    ( { m | fields = addField m.fields ( regexForm m.name m.label m.regex m.bool ) }, Cmd.none)
                 _ ->
                     (m, Cmd.none)
         _ ->
