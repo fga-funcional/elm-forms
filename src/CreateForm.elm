@@ -4,6 +4,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import List as L exposing (isEmpty)
 import Messages exposing (Msg(..), valueToString)
 import Model exposing (..)
 import Utils exposing (ulMap)
@@ -18,43 +19,55 @@ view m =
 
             else
                 "(invalid)"
+
+        -- isEmpty =
+        --     if L.isEmpty m.fields then
+        --         False
+        --     else
+        --         True
     in
     { title = "ElmForm"
     , body =
-        [ div []
-            [ h1 [] [ text "Form", text validation ]
-            , div []
-                [ label [] [ text "Name" ]
-                , input [ onInput Name ] []
-                , label [] [ text "label" ]
-                , input [ onInput Label ] []
-                , label [] [ text "obrigatório" ]
-                , input [onClick (Bool (isRequired m.bool)), type_ "checkbox" ] []
-                , button [ onClick (Type "Text") ] [text "Texto"]
-                , button [ onClick (Type "Numbers") ] [text "Numeros"]
-                , button [ onClick (Type "Bool") ] [text "Boleano"]
-                , label [] [ text "Regex" ]
-                , input [ onInput RegexFormCreate ] []
-                , button [ onClick (Type "Regex") ] [text "Regex"]
-                ]
-            , ulMap text m.errors
-            , div [] (List.indexedMap viewField m.fields)
-            , h3 [] [ text "Raw data" ]
-            , code [] [ text (Debug.toString m) ]
-            ]
+        [ h1 [] [ text "Form", text validation ]
+        , renderCreateForm m
+        , ulMap text m.errors
+        , div [] (List.indexedMap viewField m.fields)
+        , label [] [ text "Digite uma senha para recuperar os dados do form" ]
+        , input [ onInput Password, type_ "password" ] []
+        , button [ onClick CreateForm ] [ text "Criar" ]
+        , button [ onClick ShowForm ] [ text "Verificar se ja exist form" ]
         ]
     }
 
+
+renderCreateForm m =
+    div []
+        [ label [] [ text "Name" ]
+        , input [ onInput Name ] []
+        , label [] [ text "label" ]
+        , input [ onInput Label ] []
+        , label [] [ text "obrigatório" ]
+        , input [ onClick (Bool (isRequired m.bool)), type_ "checkbox" ] []
+        , button [ onClick (Type "Text") ] [ text "Texto" ]
+        , button [ onClick (Type "Numbers") ] [ text "Numeros" ]
+        , button [ onClick (Type "Bool") ] [ text "Boleano" ]
+        , label [] [ text "Regex" ]
+        , input [ onInput RegexFormCreate ] []
+        , button [ onClick (Type "Regex") ] [ text "Regex" ]
+        ]
+
+
 isRequired : Bool -> Bool
-isRequired b = 
+isRequired b =
     not b
+
 
 viewField : Int -> Field -> Html Msg
 viewField i field =
     let
         attributes =
             case field.which of
-                NumberField _ ->
+                NumberField ->
                     [ type_ "number" ]
 
                 BoolField ->

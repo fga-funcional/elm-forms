@@ -1,7 +1,8 @@
-module Model exposing (Model, Field, Value(..), FieldType(..), string, number, bool, regexForm, init)
+module Model exposing (Field, FieldType(..), Model, Value(..), bool,  number, regexForm, string)
 
 import Browser.Navigation as Nav
 import Url
+
 
 type alias Model =
     { fields : List Field
@@ -10,6 +11,9 @@ type alias Model =
     , label : String
     , bool : Bool
     , regex : String
+    , password : String
+    , url : Url.Url
+    , key : Nav.Key
     }
 
 
@@ -30,61 +34,47 @@ type Value
 
 
 type FieldType
-    = StringField { maxLength : Int }
-    | NumberField { range : ( Float, Float, Float ) }
+    = StringField
+    | NumberField
     | BoolField
     | RegexField String Bool
-
-
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd msg )
-init _ url key =
-    ( { fields = [
-        --  string "name" "Name" False
-            -- , string "email" "E-mail" True
-            -- , number "age" "Age" True
-            -- , bool "bollean" "Check" False
-            -- , regexForm "real-email" "E-mailR" "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" True
-        ]
-      , errors = []
-      , name = ""
-      , label = ""
-      , bool = False
-      , regex = ""
-      }
-      , Cmd.none
-    )
 
 
 string : String -> String -> Bool -> Field
 string name label isRequired =
     if isRequired then
-        Field name label "" (StringValue "") (StringField { maxLength = 2 ^ 30 }) isRequired ["Cant be blanck"]
+        Field name label "" (StringValue "") (StringField ) isRequired [ "Cant be blanck" ]
+
     else
-        Field name label "" (StringValue "") (StringField { maxLength = 2 ^ 30 }) isRequired []
+        Field name label "" (StringValue "") (StringField ) isRequired []
 
 
 number : String -> String -> Bool -> Field
 number name label isRequired =
     if isRequired then
-        Field name label "" (StringValue "") (NumberField { range = ( -inf, inf, 0.01 ) }) isRequired ["Cant be blanck"]
+        Field name label "" (StringValue "") (NumberField ) isRequired [ "Cant be blanck" ]
+
     else
-        Field name label "" (StringValue "") (NumberField { range = ( -inf, inf, 0.01 ) }) isRequired []
+        Field name label "" (StringValue "") (NumberField ) isRequired []
 
 
 bool : String -> String -> Bool -> Field
 bool name label isRequired =
     if isRequired then
-        Field name label "" (BoolValue False) BoolField isRequired ["Cant be blanck"]
+        Field name label "" (BoolValue False) BoolField isRequired [ "Cant be blanck" ]
+
     else
         Field name label "" (BoolValue False) BoolField isRequired []
 
 
-regexForm : String -> String -> String  -> Bool -> Field
+regexForm : String -> String -> String -> Bool -> Field
 regexForm name label regexValue isRequired =
     if isRequired then
-        Field name label "" (StringValue "") (RegexField regexValue False) isRequired ["Cant be blanck"]
+        Field name label "" (StringValue "") (RegexField regexValue False) isRequired [ "Cant be blanck" ]
+
     else
         Field name label "" (StringValue "") (RegexField regexValue False) isRequired []
+
 
 inf =
     1.0e300
